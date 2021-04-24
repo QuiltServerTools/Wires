@@ -1,5 +1,6 @@
 package com.github.quiltservertools.wires.config;
 
+import com.github.quiltservertools.wires.StaffChat;
 import com.github.quiltservertools.wires.Wires;
 import com.github.quiltservertools.wires.command.mute.Mute;
 import com.github.quiltservertools.wires.command.mute.ServerMute;
@@ -25,6 +26,7 @@ public class Config {
     public JsonObject json;
     private List<Mute> muted;
     private final ServerMute serverMute;
+    private final StaffChat staffChat;
 
     public Config() {
         String path = FabricLoader.getInstance().getConfigDir().toString() + "\\wires.json";
@@ -35,6 +37,7 @@ public class Config {
             e.printStackTrace();
         }
         this.serverMute = new ServerMute();
+        this.staffChat = new StaffChat();
     }
 
     private List<Mute> initMuted() {
@@ -63,6 +66,9 @@ public class Config {
                 }
         );
         json.add("muted", muteArray);
+
+        // Saving for other config options
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             Files.write(Paths.get(FabricLoader.getInstance().getConfigDir().toString() + "\\wires.json"), gson.toJson(json).getBytes());
@@ -98,5 +104,9 @@ public class Config {
 
     public ServerMute getServerMute() {
         return this.serverMute;
+    }
+
+    public StaffChat getStaffChat() {
+        return this.staffChat;
     }
 }

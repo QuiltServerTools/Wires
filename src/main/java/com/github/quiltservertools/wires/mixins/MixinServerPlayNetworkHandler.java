@@ -34,12 +34,16 @@ public class MixinServerPlayNetworkHandler {
     @Inject(method = "onGameMessage(Lnet/minecraft/network/packet/c2s/play/ChatMessageC2SPacket;)V", at = @At("HEAD"), cancellable = true)
     public void interceptChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
         Config config = Wires.config;
+        String message = packet.getChatMessage();
         if (config.isPlayerMuted(player.getUuid()) && !Permissions.check(player, "wires.mute", 2)) {
             player.sendSystemMessage(muted, Util.NIL_UUID);
             player.sendSystemMessage(new LiteralText("Reason: " + (config.getMute(player).isPresent() ? config.getMute(player).get().getReason() : "<None provided>")), Util.NIL_UUID);
             ci.cancel();
-        } else if (config.getServerMute().getState() && !Permissions.check(player, "wires.servermute", 2) && !packet.getChatMessage().startsWith("/") && !packet.getChatMessage().startsWith("/me")) {
+        } else if (config.getServerMute().getState() && !Permissions.check(player, "wires.servermute", 2) && !message.startsWith("/") && !message.startsWith("/me")) {
             player.sendSystemMessage(serverMuted, Util.NIL_UUID);
+            ci.cancel();
+        } else if (config.getStaffChat().isInStaffChat(player.getUuid()) && !message.startsWith("/")) {
+            config.getStaffChat().sendMessage(player, message);
             ci.cancel();
         }
     }

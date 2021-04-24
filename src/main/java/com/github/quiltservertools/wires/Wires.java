@@ -1,6 +1,7 @@
 package com.github.quiltservertools.wires;
 
 import com.github.quiltservertools.wires.command.MaintenanceModeCommand;
+import com.github.quiltservertools.wires.command.StaffChatCommand;
 import com.github.quiltservertools.wires.command.VanishCommand;
 import com.github.quiltservertools.wires.command.mute.MuteCommand;
 import com.github.quiltservertools.wires.config.Config;
@@ -21,6 +22,7 @@ public class Wires implements DedicatedServerModInitializer {
             MaintenanceModeCommand.register(dispatcher);
             VanishCommand.register(dispatcher);
             MuteCommand.register(dispatcher);
+            StaffChatCommand.register(dispatcher);
         });
 
         ServerLifecycleEvents.SERVER_STOPPING.register((server -> {
