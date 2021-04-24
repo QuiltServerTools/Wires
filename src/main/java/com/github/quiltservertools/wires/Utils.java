@@ -3,7 +3,7 @@ package com.github.quiltservertools.wires;
 import java.time.Duration;
 import java.time.Instant;
 
-public class TimeUtils {
+public class Utils {
     public static long parseTime(String input) {
         Duration duration = Duration.ZERO;
 

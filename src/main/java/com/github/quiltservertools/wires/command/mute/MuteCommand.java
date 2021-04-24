@@ -1,7 +1,7 @@
 package com.github.quiltservertools.wires.command.mute;
 
+import com.github.quiltservertools.wires.Utils;
 import com.github.quiltservertools.wires.Wires;
-import com.github.quiltservertools.wires.TimeUtils;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -24,17 +24,23 @@ public class MuteCommand {
                         .then(argument("time", StringArgumentType.string())
                                 .executes(ctx -> mutePlayer(ctx.getSource(),
                                         GameProfileArgumentType.getProfileArgument(ctx, "target").stream().findFirst().isPresent() ? GameProfileArgumentType.getProfileArgument(ctx, "target").stream().findFirst().get() : null,
-                                        TimeUtils.parseTime(StringArgumentType.getString(ctx, "time")), ""))
-                        .then(argument("reason", StringArgumentType.greedyString())
-                                .executes(ctx -> mutePlayer(ctx.getSource(),
-                                        GameProfileArgumentType.getProfileArgument(ctx, "target").stream().findFirst().isPresent() ? GameProfileArgumentType.getProfileArgument(ctx, "target").stream().findFirst().get() : null,
-                                        TimeUtils.parseTime(StringArgumentType.getString(ctx, "time")), StringArgumentType.getString(ctx, "reason")))
-                        ))
+                                        Utils.parseTime(StringArgumentType.getString(ctx, "time")), ""))
+                                .then(argument("reason", StringArgumentType.greedyString())
+                                        .executes(ctx -> mutePlayer(ctx.getSource(),
+                                                GameProfileArgumentType.getProfileArgument(ctx, "target").stream().findFirst().isPresent() ? GameProfileArgumentType.getProfileArgument(ctx, "target").stream().findFirst().get() : null,
+                                                Utils.parseTime(StringArgumentType.getString(ctx, "time")), StringArgumentType.getString(ctx, "reason")))
+                                ))
                 )
         );
+
+        // Server mute command
+        dispatcher.register(literal("servermute").requires(scs -> Permissions.check(scs, "wires.servermute", 3))
+                .executes(ctx -> serverMute(ctx.getSource(), -1))
+                .then(argument("time", StringArgumentType.string())
+                        .executes(ctx -> serverMute(ctx.getSource(), Utils.parseTime(StringArgumentType.getString(ctx, "time"))))));
     }
 
-    public static int mutePlayer(ServerCommandSource scs, GameProfile profile, long seconds, String reason) {
+    private static int mutePlayer(ServerCommandSource scs, GameProfile profile, long seconds, String reason) {
         if (profile == null) {
             scs.sendError(new LiteralText("Unable to locate player profile with provided username").formatted(Formatting.RED));
             return 0;
@@ -44,5 +50,10 @@ public class MuteCommand {
         return 1;
     }
 
+    private static int serverMute(ServerCommandSource scs, long time) {
+        boolean serverMuteStatus = Wires.config.serverMute(time);
+        scs.sendFeedback(new LiteralText("Server mute " + (serverMuteStatus ? "enabled" : "disabled")), true);
+        return 1;
+    }
 
 }

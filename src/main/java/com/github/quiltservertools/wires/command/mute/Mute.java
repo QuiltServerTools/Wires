@@ -3,7 +3,7 @@ package com.github.quiltservertools.wires.command.mute;
 import java.util.UUID;
 
 public class Mute {
-    private long time;
+    private final long time;
     private final UUID uuid;
     private final String reason;
 

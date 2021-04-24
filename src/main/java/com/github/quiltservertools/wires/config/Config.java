@@ -2,6 +2,7 @@ package com.github.quiltservertools.wires.config;
 
 import com.github.quiltservertools.wires.Wires;
 import com.github.quiltservertools.wires.command.mute.Mute;
+import com.github.quiltservertools.wires.command.mute.ServerMute;
 import com.google.gson.*;
 import com.mojang.authlib.GameProfile;
 import net.fabricmc.loader.api.FabricLoader;
@@ -23,6 +24,7 @@ public class Config {
 
     public JsonObject json;
     private List<Mute> muted;
+    private final ServerMute serverMute;
 
     public Config() {
         String path = FabricLoader.getInstance().getConfigDir().toString() + "\\wires.json";
@@ -32,6 +34,7 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.serverMute = new ServerMute();
     }
 
     private List<Mute> initMuted() {
@@ -86,5 +89,14 @@ public class Config {
 
     public Optional<Mute> getMute(ServerPlayerEntity player) {
         return muted.stream().filter(mute -> mute.getUuid().equals(player.getUuid())).findFirst();
+    }
+
+    public boolean serverMute(long time) {
+        serverMute.set(time, !serverMute.getState());
+        return serverMute.getState();
+    }
+
+    public ServerMute getServerMute() {
+        return this.serverMute;
     }
 }
