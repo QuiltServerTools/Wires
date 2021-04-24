@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "wires",
+  "version": "1.0.0",
+
+  "name": "Wires",
+  "description": "Server utilities for Quilt",
+  "authors": [
+    "yitzy299"
+  ],
+  "contact": {
+    "homepage": "https://github.com/quiltservertools",
+    "sources": "https://github.com/quiltservertools"
+  },
+
+  "license": "MIT",
+
+  "environment": "server",
+  "entrypoints": {
+    "server": [
+      "com.github.quiltservertools.wires.Wires"
+    ]
+  },
+  "mixins": [
+    "wires.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": ">=0.25.0",
+    "minecraft": "1.16.x"
+  }
+}
