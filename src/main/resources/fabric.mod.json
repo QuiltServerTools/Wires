@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "wires",
-  "version": "1.0.0",
+  "version": "1.0.1",
 
   "name": "Wires",
   "description": "Server utilities for Quilt",

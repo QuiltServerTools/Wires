@@ -16,12 +16,12 @@ public class StaffChatCommand {
                 .requires(scs -> Permissions.check(scs, "wires.staffchat", 2))
                 .executes(ctx -> {
                     Wires.config.getStaffChat().toggle(ctx.getSource().getPlayer().getUuid());
+                    ctx.getSource().sendFeedback(new LiteralText(Wires.config.getStaffChat().isInStaffChat(ctx.getSource().getPlayer().getUuid()) ? "Moved to staff chat" : "Moved to game chat"), false);
                     return 1;
                 })
                 .then(argument("message", StringArgumentType.greedyString()).executes(
                         ctx -> {
                             Wires.config.getStaffChat().sendMessage(ctx.getSource().getPlayer(), StringArgumentType.getString(ctx, "message"));
-                            ctx.getSource().sendFeedback(new LiteralText(Wires.config.getStaffChat().isInStaffChat(ctx.getSource().getPlayer().getUuid()) ? "Joined" : "Left" + " staffchat"), false);
                             return 1;
                         }
                 )));

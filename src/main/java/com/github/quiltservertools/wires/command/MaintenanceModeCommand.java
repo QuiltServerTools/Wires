@@ -27,7 +27,7 @@ public class MaintenanceModeCommand {
                         player.networkHandler.disconnect(new LiteralText("Server closed for maintenance"));
                 }
         );
-        scs.sendFeedback(new LiteralText(state ? "Enabled" : "Disabled").formatted(state ? Formatting.RED : Formatting.GREEN), true);
+        scs.sendFeedback(new LiteralText("Maintenance mode " + (state ? "enabled" : "disabled")).formatted(state ? Formatting.RED : Formatting.GREEN), true);
         return 1;
     }
 
