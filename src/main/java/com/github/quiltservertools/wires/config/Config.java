@@ -33,11 +33,15 @@ public class Config {
         try {
             this.json = new JsonParser().parse(new String(Files.readAllBytes(Paths.get(path)))).getAsJsonObject();
             muted = initMuted();
+            Wires.LOGGER.info("Loaded Wires config");
         } catch (IOException e) {
-            e.printStackTrace();
+            muted = new ArrayList<>();
+            Wires.LOGGER.info("Unable to find existing Wires config file");
+            Wires.LOGGER.info("A config file will be created on server shutdown");
         }
         this.serverMute = new ServerMute();
         this.staffChat = new StaffChat();
+
     }
 
     private List<Mute> initMuted() {
