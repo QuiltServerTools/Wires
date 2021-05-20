@@ -11,7 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +23,16 @@ public class Config {
     Contains config values from the JSON config file
      */
 
+    public static final Path PATH = FabricLoader.getInstance().getConfigDir().resolve("wires.json");
+
     public JsonObject json;
     private List<Mute> muted;
     private final ServerMute serverMute;
     private final StaffChat staffChat;
 
     public Config() {
-        String path = FabricLoader.getInstance().getConfigDir().toString() + "\\wires.json";
         try {
-            this.json = new JsonParser().parse(new String(Files.readAllBytes(Paths.get(path)))).getAsJsonObject();
+            this.json = new JsonParser().parse(new String(Files.readAllBytes(PATH))).getAsJsonObject();
             muted = initMuted();
             Wires.LOGGER.info("Loaded Wires config");
         } catch (IOException e) {
@@ -75,7 +76,7 @@ public class Config {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            Files.write(Paths.get(FabricLoader.getInstance().getConfigDir().toString() + "\\wires.json"), gson.toJson(json).getBytes());
+            Files.write(PATH, gson.toJson(json).getBytes());
         } catch (IOException e) {
             e.printStackTrace();
             Wires.LOGGER.error("Unable to save configuration in config file");
