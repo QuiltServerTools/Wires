@@ -29,7 +29,7 @@ public class Config {
     private final StaffChat staffChat;
 
     public Config() {
-        String path = FabricLoader.getInstance().getConfigDir().toString() + "\\wires.json";
+        String path = FabricLoader.getInstance().getConfigDir().toString() + "/wires.json";
         try {
             this.json = new JsonParser().parse(new String(Files.readAllBytes(Paths.get(path)))).getAsJsonObject();
             muted = initMuted();
