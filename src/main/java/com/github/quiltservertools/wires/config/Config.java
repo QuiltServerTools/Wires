@@ -29,11 +29,13 @@ public class Config {
     private List<Mute> muted;
     private final ServerMute serverMute;
     private final StaffChat staffChat;
+    private boolean maintenanceMode;
 
     public Config() {
         try {
             this.json = new JsonParser().parse(new String(Files.readAllBytes(PATH))).getAsJsonObject();
             muted = initMuted();
+            maintenanceMode = initMaintenanceMode();
             Wires.LOGGER.info("Loaded Wires config");
         } catch (IOException e) {
             muted = new ArrayList<>();
@@ -43,6 +45,14 @@ public class Config {
         this.serverMute = new ServerMute();
         this.staffChat = new StaffChat();
 
+    }
+
+    private boolean initMaintenanceMode() {
+        try {
+            return json.get("maintenance_mode").getAsBoolean();
+        } catch (JsonSyntaxException e) {
+            return false;
+        }
     }
 
     private List<Mute> initMuted() {
@@ -71,6 +81,7 @@ public class Config {
                 }
         );
         json.add("muted", muteArray);
+        json.addProperty("maintenance_mode", maintenanceMode);
 
         // Saving for other config options
 
@@ -113,5 +124,13 @@ public class Config {
 
     public StaffChat getStaffChat() {
         return this.staffChat;
+    }
+
+    public boolean isMaintenanceMode() {
+        return maintenanceMode;
+    }
+
+    public void setMaintenanceMode(boolean maintenanceMode) {
+        this.maintenanceMode = maintenanceMode;
     }
 }

@@ -1,6 +1,6 @@
 package com.github.quiltservertools.wires.mixins;
 
-import com.github.quiltservertools.wires.command.MaintenanceModeCommand;
+import com.github.quiltservertools.wires.Wires;
 import com.github.quiltservertools.wires.command.VanishCommand;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.network.ClientConnection;
@@ -21,7 +21,7 @@ import java.net.SocketAddress;
 public class MixinPlayerManager {
     @Inject(method = "checkCanJoin(Ljava/net/SocketAddress;Lcom/mojang/authlib/GameProfile;)Lnet/minecraft/text/Text;", at = @At("RETURN"), cancellable = true)
     public void checkMaintenanceMode(SocketAddress address, GameProfile profile, CallbackInfoReturnable<Text> cir) {
-        if(MaintenanceModeCommand.getMaintenanceMode() && !((PlayerManager) (Object) this).isOperator(profile)) {
+        if(Wires.CONFIG.isMaintenanceMode() && !((PlayerManager) (Object) this).isOperator(profile)) {
             cir.setReturnValue(new LiteralText("Server is closed for maintenance"));
         }
     }

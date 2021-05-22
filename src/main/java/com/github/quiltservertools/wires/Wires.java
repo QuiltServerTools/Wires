@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 public class Wires implements DedicatedServerModInitializer {
 
     public static final Logger LOGGER = LogManager.getLogger("Wires");
-    public static Config config;
+    public static Config CONFIG;
 
     @Override
     public void onInitializeServer() {
@@ -27,9 +27,9 @@ public class Wires implements DedicatedServerModInitializer {
 
         ServerLifecycleEvents.SERVER_STOPPING.register((server -> {
             VanishCommand.getInstance().getPlayers().forEach(player -> VanishCommand.getInstance().addOrRemove(player));
-            config.shutdown();
+            CONFIG.shutdown();
         }));
 
-        config = new Config();
+        CONFIG = new Config();
     }
 }

@@ -45,13 +45,13 @@ public class MuteCommand {
             scs.sendError(new LiteralText("Unable to locate player profile with provided username").formatted(Formatting.RED));
             return 0;
         }
-        Wires.config.mute(profile, seconds, reason);
+        Wires.CONFIG.mute(profile, seconds, reason);
         scs.sendFeedback(new LiteralText("Muted " + profile.getName() + " for " + (seconds - Instant.now().getEpochSecond()) + "seconds"), true);
         return 1;
     }
 
     private static int serverMute(ServerCommandSource scs, long time) {
-        boolean serverMuteStatus = Wires.config.serverMute(time);
+        boolean serverMuteStatus = Wires.CONFIG.serverMute(time);
         scs.sendFeedback(new LiteralText("Server mute " + (serverMuteStatus ? "enabled" : "disabled")), true);
         return 1;
     }
