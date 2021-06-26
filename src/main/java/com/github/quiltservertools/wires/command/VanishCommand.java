@@ -35,7 +35,7 @@ public class VanishCommand {
     private static int modifyPlayer(CommandContext<ServerCommandSource> ctx) throws CommandSyntaxException {
         ServerPlayerEntity player = EntityArgumentType.getPlayer(ctx, "player");
         getInstance().addOrRemove(player);
-        ctx.getSource().sendFeedback(new LiteralText((getInstance().players.contains(player) ? "Vanished" : "Unvanished") + player.getName().asString()), true);
+        ctx.getSource().sendFeedback(new LiteralText((getInstance().players.contains(player) ? "Vanished " : "Unvanished ") + player.getName().asString()), true);
         return 1;
     }
 
