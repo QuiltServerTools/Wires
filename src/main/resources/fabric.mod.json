@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "wires",
-  "version": "1.0.2",
+  "version": "${version}",
 
   "name": "Wires",
   "description": "Server utilities for Quilt",
@@ -26,8 +26,9 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
-    "fabric": ">=0.25.0",
-    "minecraft": "1.16.x"
+    "fabricloader": ">=0.11.6",
+    "fabric": ">=0.34.9",
+    "minecraft": "1.17.x",
+    "java": ">=16"
   }
 }
