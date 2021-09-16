@@ -22,7 +22,7 @@ public class MaintenanceModeCommand {
 
     private static int setMaintenanceState(boolean state, ServerCommandSource scs) {
         Wires.CONFIG.setMaintenanceMode(state);
-        scs.getMinecraftServer().getPlayerManager().getPlayerList().forEach(player -> {
+        scs.getServer().getPlayerManager().getPlayerList().forEach(player -> {
                     if (!Permissions.check(player, "wires.maintenance", 3))
                         player.networkHandler.disconnect(new LiteralText("Server closed for maintenance"));
                 }
