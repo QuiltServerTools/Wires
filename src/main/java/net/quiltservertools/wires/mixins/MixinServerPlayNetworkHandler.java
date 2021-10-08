@@ -1,8 +1,8 @@
-package com.github.quiltservertools.wires.mixins;
+package net.quiltservertools.wires.mixins;
 
-import com.github.quiltservertools.wires.Wires;
-import com.github.quiltservertools.wires.config.Config;
-import me.lucko.fabric.api.permissions.v0.Permissions;
+import net.quiltservertools.wires.StaffChat;
+import net.quiltservertools.wires.command.MuteCommands;
+import net.quiltservertools.wires.config.Config;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -11,6 +11,7 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
+import net.quiltservertools.wires.util.Permissions;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,17 +34,17 @@ public class MixinServerPlayNetworkHandler {
 
     @Inject(method = "onGameMessage(Lnet/minecraft/network/packet/c2s/play/ChatMessageC2SPacket;)V", at = @At("HEAD"), cancellable = true)
     public void interceptChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
-        Config config = Wires.CONFIG;
+        Config config = Config.INSTANCE;
         String message = packet.getChatMessage();
-        if (config.isPlayerMuted(player.getUuid()) && !Permissions.check(player, "wires.mute", 2)) {
+        if (config.isPlayerMuted(player.getUuid()) && Permissions.INSTANCE.hasPermission(player.getCommandSource(), MuteCommands.name)) {
             player.sendSystemMessage(muted, Util.NIL_UUID);
             player.sendSystemMessage(new LiteralText("Reason: " + (config.getMute(player).isPresent() ? config.getMute(player).get().getReason() : "<None provided>")), Util.NIL_UUID);
             ci.cancel();
-        } else if (config.getServerMute().getState() && !Permissions.check(player, "wires.servermute", 2) && !message.startsWith("/") && !message.startsWith("/me")) {
+        } else if (config.getServerMute().getState() && !Permissions.INSTANCE.hasPermission(player.getCommandSource(), MuteCommands.serverMute) && !message.startsWith("/") && !message.startsWith("/me")) {
             player.sendSystemMessage(serverMuted, Util.NIL_UUID);
             ci.cancel();
-        } else if (config.getStaffChat().isInStaffChat(player.getUuid()) && !message.startsWith("/")) {
-            config.getStaffChat().sendMessage(player, message);
+        } else if (StaffChat.INSTANCE.isInStaffChat(player.getUuid()) && !message.startsWith("/")) {
+            StaffChat.INSTANCE.sendMessage(player, message);
             ci.cancel();
         }
     }

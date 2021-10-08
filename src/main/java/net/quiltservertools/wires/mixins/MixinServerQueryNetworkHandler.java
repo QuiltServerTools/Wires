@@ -1,10 +1,9 @@
-package com.github.quiltservertools.wires.mixins;
+package net.quiltservertools.wires.mixins;
 
-import com.github.quiltservertools.wires.Wires;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.server.network.ServerQueryNetworkHandler;
+import net.quiltservertools.wires.config.Config;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,7 +14,7 @@ public abstract class MixinServerQueryNetworkHandler {
     private ServerMetadata showMaintenance(MinecraftServer server) {
         var realData = server.getServerMetadata();
 
-        if(Wires.CONFIG.isMaintenanceMode()) {
+        if(Config.INSTANCE.isMaintenanceMode()) {
             var metadata = new ServerMetadata();
             metadata.setVersion(new ServerMetadata.Version("Maintenance", -1));
             metadata.setDescription(realData.getDescription());
