@@ -2,6 +2,7 @@ package net.quiltservertools.wires.mixins;
 
 import net.quiltservertools.wires.StaffChat;
 import net.quiltservertools.wires.command.MuteCommands;
+import net.quiltservertools.wires.command.VanishCommand;
 import net.quiltservertools.wires.config.Config;
 import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.server.MinecraftServer;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayNetworkHandler.class)
-public class MixinServerPlayNetworkHandler {
+public abstract class MixinServerPlayNetworkHandler {
 
     private static final Text muted = new LiteralText("Unable to send message: you have been muted. Contact a moderator if you believe this is a mistake.").formatted(Formatting.RED);
     private static final Text serverMuted = new LiteralText("Unable to send message: the chat has been server muted. You can still use commands. Contact a moderator if you believe this is a mistake.").formatted(Formatting.YELLOW);
@@ -28,9 +29,7 @@ public class MixinServerPlayNetworkHandler {
     @Shadow
     public ServerPlayerEntity player;
 
-    @Final
-    @Shadow
-    private MinecraftServer server;
+    @Shadow public abstract ServerPlayerEntity getPlayer();
 
     @Inject(method = "onGameMessage(Lnet/minecraft/network/packet/c2s/play/ChatMessageC2SPacket;)V", at = @At("HEAD"), cancellable = true)
     public void interceptChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
@@ -47,5 +46,10 @@ public class MixinServerPlayNetworkHandler {
             StaffChat.INSTANCE.sendMessage(player, message);
             ci.cancel();
         }
+    }
+
+    @Inject(method = "onDisconnected", at = @At("HEAD"))
+    public void removeFromVanish(Text reason, CallbackInfo ci) {
+        VanishCommand.INSTANCE.removePlayer(this.getPlayer());
     }
 }

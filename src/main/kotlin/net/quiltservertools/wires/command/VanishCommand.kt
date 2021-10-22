@@ -40,6 +40,12 @@ object VanishCommand {
         }
     }
 
+    fun removePlayer(player: ServerPlayerEntity) {
+        if (players.contains(player)) {
+            addOrRemove(player)
+        }
+    }
+
     private const val name = "vanish"
     private val EFFECT_INSTANCE = StatusEffectInstance(StatusEffects.INVISIBILITY, Int.MAX_VALUE, 1, false, false, false)
 
