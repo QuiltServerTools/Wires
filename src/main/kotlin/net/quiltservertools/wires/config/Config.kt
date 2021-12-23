@@ -26,7 +26,7 @@ object Config {
 
     init {
         try {
-            json = JsonParser().parse(String(Files.readAllBytes(PATH))).asJsonObject
+            json = JsonParser.parseString(Files.readString(PATH)).asJsonObject
             initMuted()
             maintenanceMode = initMaintenanceMode()
             Wires.LOGGER.info("Loaded Wires config")

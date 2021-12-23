@@ -31,7 +31,7 @@ public abstract class MixinServerPlayNetworkHandler {
 
     @Shadow public abstract ServerPlayerEntity getPlayer();
 
-    @Inject(method = "onGameMessage(Lnet/minecraft/network/packet/c2s/play/ChatMessageC2SPacket;)V", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "onChatMessage(Lnet/minecraft/network/packet/c2s/play/ChatMessageC2SPacket;)V", at = @At("HEAD"), cancellable = true)
     public void interceptChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
         Config config = Config.INSTANCE;
         String message = packet.getChatMessage();
