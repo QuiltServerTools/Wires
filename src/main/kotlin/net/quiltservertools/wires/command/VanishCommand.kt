@@ -11,7 +11,7 @@ import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import net.quiltservertools.wires.util.Permissions.hasPermission
 
 object VanishCommand {
@@ -68,7 +68,7 @@ object VanishCommand {
         val player = EntityArgumentType.getPlayer(ctx, "player")
         addOrRemove(player)
         ctx.source.sendFeedback(
-            LiteralText("${if (players.contains(player)) "Vanished" else "Unvanished"} ${player.name.asString()}"),
+            Text.literal("${if (players.contains(player)) "Vanished" else "Unvanished"} ${player.name.string}"),
             true
         )
         return 1

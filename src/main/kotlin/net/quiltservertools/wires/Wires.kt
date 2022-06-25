@@ -1,8 +1,10 @@
 package net.quiltservertools.wires
 
 import com.mojang.brigadier.CommandDispatcher
+import net.minecraft.command.CommandRegistryAccess
+import net.minecraft.server.command.CommandManager.RegistrationEnvironment
 import net.fabricmc.api.DedicatedServerModInitializer
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.server.command.ServerCommandSource
 import net.quiltservertools.wires.command.MaintenanceModeCommand
@@ -17,7 +19,7 @@ object Wires : DedicatedServerModInitializer {
     val LOGGER = LogManager.getLogger("Wires")
 
     override fun onInitializeServer() {
-        CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback { dispatcher: CommandDispatcher<ServerCommandSource>, dedicated: Boolean ->
+        CommandRegistrationCallback.EVENT.register(CommandRegistrationCallback { dispatcher: CommandDispatcher<ServerCommandSource>, registryAccess: CommandRegistryAccess, environment: RegistrationEnvironment ->
             MaintenanceModeCommand.register(dispatcher)
             VanishCommand.register(dispatcher)
             MuteCommands.registerCommands(dispatcher)
