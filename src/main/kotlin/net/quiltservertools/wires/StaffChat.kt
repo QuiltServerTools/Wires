@@ -1,7 +1,6 @@
 package net.quiltservertools.wires
 
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.util.Util
@@ -27,14 +26,13 @@ object StaffChat {
 
     fun sendMessage(sender: ServerPlayerEntity, message: String) {
         val text: Text =
-            LiteralText("[Staff Chat]").formatted(Formatting.GOLD).append(LiteralText(" <${sender.name.asString()}> $message").formatted(Formatting.WHITE))
+            Text.literal("[Staff Chat]").formatted(Formatting.GOLD).append(Text.literal(" <${sender.name.string}> $message").formatted(Formatting.WHITE))
         sender.getServer()?.playerManager!!.playerList!!.stream()
             .filter {
                 it.commandSource.hasPermission(name)
             }.forEach {
-                it.sendSystemMessage(
-                    text,
-                    Util.NIL_UUID
+                it.sendMessage(
+                    text
                 )
             }
     }

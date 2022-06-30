@@ -7,7 +7,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.command.argument.GameProfileArgumentType
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.quiltservertools.wires.Utils.parseTime
 import net.quiltservertools.wires.config.Config
@@ -82,12 +82,12 @@ object MuteCommands {
 
     private fun mutePlayer(scs: ServerCommandSource, profile: GameProfile?, seconds: Long, reason: String): Int {
         if (profile == null) {
-            scs.sendError(LiteralText("Unable to locate player profile with provided username").formatted(Formatting.RED))
+            scs.sendError(Text.literal("Unable to locate player profile with provided username").formatted(Formatting.RED))
             return 0
         }
         Config.mute(profile, seconds, reason)
         scs.sendFeedback(
-            LiteralText("Muted ${profile.name} for${
+            Text.literal("Muted ${profile.name} for${
                 if (seconds < 0) {
                     "ever"
                 } else {
@@ -101,7 +101,7 @@ object MuteCommands {
     private fun unmutePlayer(scs: ServerCommandSource, profile: GameProfile): Int {
         Config.unmute(profile)
         scs.sendFeedback(
-            LiteralText("Unmuted ${profile.name}"),
+            Text.literal("Unmuted ${profile.name}"),
             true
         )
         return 1
@@ -109,7 +109,7 @@ object MuteCommands {
 
     private fun serverMute(scs: ServerCommandSource, time: Long): Int {
         val serverMuteStatus: Boolean = Config.serverMute(time)
-        scs.sendFeedback(LiteralText("Server mute ${if (serverMuteStatus) "enabled" else "disabled"}"), true)
+        scs.sendFeedback(Text.literal("Server mute ${if (serverMuteStatus) "enabled" else "disabled"}"), true)
         return 1
     }
 }

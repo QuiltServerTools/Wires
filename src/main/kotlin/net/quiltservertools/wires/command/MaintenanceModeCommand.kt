@@ -5,7 +5,7 @@ import com.mojang.brigadier.context.CommandContext
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.quiltservertools.wires.config.Config
 import net.quiltservertools.wires.util.Permissions.hasPermission
@@ -46,11 +46,11 @@ object MaintenanceModeCommand {
         if (state) {
             scs.server.playerManager.playerList.forEach { player: ServerPlayerEntity ->
                 if (!player.commandSource.hasPermission(name)
-                ) player.networkHandler.disconnect(LiteralText("Server closed for maintenance"))
+                ) player.networkHandler.disconnect(Text.literal("Server closed for maintenance"))
             }
         }
         scs.sendFeedback(
-            LiteralText("Maintenance mode ").append(LiteralText(if (state) "enabled" else "disabled").formatted(if (state) Formatting.RED else Formatting.GREEN)),
+            Text.literal("Maintenance mode ").append(Text.literal(if (state) "enabled" else "disabled").formatted(if (state) Formatting.RED else Formatting.GREEN)),
             true
         )
         return 1
